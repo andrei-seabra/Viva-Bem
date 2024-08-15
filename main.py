@@ -41,7 +41,7 @@ for i, icon in enumerate(icons):
 
     buttons.append(button)
 
-homePage(page)
+bmiCalculator(page)
 
 # Runs the window
 window.mainloop()
