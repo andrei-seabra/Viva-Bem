@@ -62,7 +62,7 @@ def kcalCalculatorPage(canvas: Canvas = "page"):
     for i, icon in enumerate(sportsIcons):
         buttonIcon = PhotoImage(file=icon)
 
-        button = Button(canvasSports, image=buttonIcon, bd=0, anchor="center")
+        button = Button(canvasSports, anchor="center", bd=0, bg="#F8F8F8", image=buttonIcon)
         button.grid(row=0, column=i, ipadx=15)
 
         button.image = buttonIcon # Avoids problems with iteration
@@ -76,7 +76,7 @@ def kcalCalculatorPage(canvas: Canvas = "page"):
     canvas.create_text(140, 250, anchor="nw", font=("Inter", 36), text="00:00") # Timer
 
     # Toogler buttton
-    tooglerButton = Button(canvas, image=playButton, bd=0, anchor="nw")
+    tooglerButton = Button(canvas, anchor="nw", bd=0, bg="#F8F8F8", image=playButton)
     tooglerButton.place(x=158, y=417)
     canvas.playButton = playButton # Avoids calling function problems
 
@@ -122,7 +122,7 @@ def bmiCalculatorPage(canvas: Canvas = "page"):
         entries.append(guiEntry)
 
     # Button stuff
-    calculateButton = Button(canvas, image=buttonImg, bd=0)
+    calculateButton = Button(canvas, bd=0, image=buttonImg)
     canvas.create_window(121, 415, anchor="nw", width=165, height=55, window=calculateButton) # Calculate Button
     canvas.buttonImg = buttonImg # Avoids calling function problems
 
@@ -136,3 +136,17 @@ def goalPage(canvas: Canvas = "page"):
     cleanCanvas(canvas)
 
     # References
+    flag = PhotoImage(file="Assets/Images/Flag.png")
+    add = PhotoImage(file="Assets/Images/AddButton.png")
+
+    canvas.create_text(145, 137, anchor="nw", font=("Inter", 40, "bold"), text="Meta") # Title
+
+    canvas.create_image(75, 309, anchor="nw", image=flag)
+    canvas.flag = flag # Avoids calling function problems
+
+    canvas.create_text(171, 325, anchor="nw", font=("Inter", 36, "bold"), text="100%") # Percentage display
+    canvas.create_text(110, 376, anchor="nw", font=("Inter", 24, "bold"), text="10.000 / 10.000") # Total display
+
+    button = Button(canvas, bd=0, image=add, bg="#F8F8F8")
+    canvas.create_window(158, 505, anchor="nw", width=90, height=90, window=button) # New meta button
+    canvas.add = add # Avoids calling function problems

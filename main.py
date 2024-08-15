@@ -34,7 +34,7 @@ icons = [
 for i, icon in enumerate(icons):
     buttonIcon = PhotoImage(file=icon)
 
-    button = Button(bottomBar, image=buttonIcon, bd=0, anchor="center")
+    button = Button(bottomBar, anchor="center", bd=0, image=buttonIcon)
     button.grid(row=0, column=i, ipadx=3, ipady=3)
 
     button.image = buttonIcon # Avoids problems with iteration
