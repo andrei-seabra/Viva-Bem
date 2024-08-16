@@ -1,4 +1,5 @@
 from tkinter import *
+from tkinter import ttk
 
 # Interface
 
@@ -150,3 +151,45 @@ def goalPage(canvas: Canvas = "page"):
     button = Button(canvas, bd=0, image=add, bg="#F8F8F8")
     canvas.create_window(158, 505, anchor="nw", width=90, height=90, window=button) # New meta button
     canvas.add = add # Avoids calling function problems
+
+
+
+def recipesPage(canvas: Canvas = "page"):
+    """
+        Inserts the recipes to the page canvas.
+    """
+    ...
+    cleanCanvas(canvas)
+
+    # References
+    
+
+
+
+def snoozerPage(canvas: Canvas = "page"):
+    """
+        Inserts the snoozer to the page canvas.
+    """
+
+    cleanCanvas(canvas)
+
+    # References
+    timer = PhotoImage(file="Assets/Images/Timer.png")
+    snooze = PhotoImage(file="Assets/Images/SnoozeButton.png")
+
+    canvas.create_text(40, 122, anchor="nw", font=("Inter", 27, "bold"), text="Regulador de sono") # Title
+
+    # Timer display
+    canvas.create_text(140, 235, anchor="nw", font=("Inter", 16, "bold"), text="Alarme atual") # Timer title
+
+    canvas.create_image(90, 260, anchor="nw", image=timer)
+    canvas.timer = timer # Avoids calling function problems
+
+    canvas.create_text(140, 275, anchor="nw", font=("Inter", 36), text="22:00") # Timer
+
+    button = Button(canvas, bd=0, image=snooze, bg="#F8F8F8")
+    canvas.create_window(53, 459, anchor="nw", width=75, height=75, window=button)
+    canvas.snooze = snooze # Avoids calling function problems
+    
+    options = ttk.Combobox(canvas, state="readonly", background="#666666", font=("Inter", 10, "bold"), justify="center")
+    canvas.create_window(140, 470, anchor="nw", width=225, height=50, window=options)

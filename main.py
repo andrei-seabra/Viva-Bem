@@ -41,7 +41,7 @@ for i, icon in enumerate(icons):
 
     buttons.append(button)
 
-goalPage(page)
+snoozerPage(page)
 
 # Runs the window
 window.mainloop()
