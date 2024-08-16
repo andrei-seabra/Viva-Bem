@@ -41,7 +41,15 @@ for i, icon in enumerate(icons):
 
     buttons.append(button)
 
-snoozerPage(page)
+# Bottom bar buttons configuration
+buttons[0].configure(command=lambda canvas=page: homePage(canvas)) # Home page button
+buttons[1].configure(command=lambda canvas=page: kcalCalculatorPage(canvas)) # Kcal calculator button
+buttons[2].configure(command=lambda canvas=page: bmiCalculatorPage(canvas)) # Bmi calculator button
+buttons[3].configure(command=lambda canvas=page: goalPage(canvas)) # Goal page button
+buttons[4].configure(command=lambda canvas=page: recipesPage(canvas)) # Recipes button
+buttons[5].configure(command=lambda canvas=page: snoozerPage(canvas)) # Snoozer page button
+
+homePage(page) # Initialization of the home page
 
 # Runs the window
 window.mainloop()
