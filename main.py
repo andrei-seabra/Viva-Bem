@@ -49,7 +49,16 @@ buttons[3].configure(command=lambda canvas=page: goalPage(canvas)) # Goal page b
 buttons[4].configure(command=lambda canvas=page: recipesPage(canvas)) # Recipes button
 buttons[5].configure(command=lambda canvas=page: snoozerPage(canvas)) # Snoozer page button
 
-homePage(page) # Initialization of the home page
+# Initializations
+
+# Home page
+homePage(page)
+
+# Water notifications
+waterNotification(window)
+
+# Sleep notifications
+snoozerNotificationsStarter(window=window, hour="13:18")
 
 # Runs the window
 window.mainloop()

@@ -1,8 +1,123 @@
 # Libries used in myapp library
+from schedule import every, run_pending
+from plyer import notification
+
 from tkinter import *
 from tkinter import ttk
 
 # Back-end
+
+# Calculations
+
+def bmiCalculator(weight: str, height: str):
+    """
+        Calculates the bmi of the user based on their information.
+    """
+
+    # References
+    formatedMagnitudes = []
+    
+    acceptableCharacters = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", ",", "."]
+    magnitudes = [weight, height]
+
+    # Avoids other characters in magnitudes which aren't related to numbers
+    for magnitude in magnitudes:
+        for char in magnitude:
+            if not char in acceptableCharacters:
+                ...
+                return
+            
+    # Treat the information
+    for magnitude in magnitudes:
+        if "," in magnitude:
+            formatedMagnitude = float(magnitude.replace(",","."))
+            formatedMagnitudes.append(formatedMagnitude)
+        else:
+            formatedMagnitude = float(magnitude)
+            formatedMagnitudes.append(formatedMagnitude)
+
+    # Calculation
+    bmi = formatedMagnitudes[0] / formatedMagnitudes[1] ** 2
+    
+    result = ""
+
+    if bmi < 18.5:
+        result = "Você está abaixo do peso ideal."
+    elif bmi < 25:
+        result = "Você está no peso ideal."
+    elif bmi < 30:
+        result = "Você está sobrepeso."
+    elif bmi < 40:
+        result = "Você está com obesidade."
+    else:
+        result = "Você está com obesidade mórbida."
+    
+    return result
+
+
+
+def kcalCalculator(sport: str, minutes: int):
+    """
+        Calculates the kcal burned by the user based on their information.
+    """
+
+    # Control variable
+    kcalBurnedPerMin = 0
+
+    # Checks which sport the user is practicing
+    if sport == "cycling":
+        kcalBurnedPerMin = 4
+    elif sport == "walking":
+        kcalBurnedPerMin = 6
+    else:
+        kcalBurnedPerMin = 10
+
+    # Calculation
+    kcalBurned = minutes * kcalBurnedPerMin
+
+    return kcalBurned
+
+
+
+# Notifications
+
+def waterNotification(window: Tk):
+    """
+        Notifies the user to drink water.
+    """
+
+    # References
+    icon = "Assets/Images/Icon.ico"
+    cooldown = 3600 # 1h
+
+    # Notification system
+    notification.notify(title = "Viva Bem", message = "Beba 2 copos de água.", app_icon = icon, timeout = 10)
+
+    window.after(cooldown * 1000, waterNotification) # Runs it in a loop
+
+
+
+def snoozerNotification():
+    """
+        Notifies the user to sleep and turn off the computer.
+    """
+    
+    # References
+    icon = "Assets/Images/Icon.ico"
+    cooldown = 3600 # 1h
+
+    # Notification system
+    notification.notify(title = "Viva Bem", message = "Hora de dormir, desligue o seu computador.", app_icon = icon, timeout = 30)
+
+def snoozerNotificationsStarter(window: Tk, hour: str = "22:00"):
+    every().day.at(hour).do(snoozerNotification)
+
+    def scheduleChecker():
+        run_pending()
+        window.after(1000, scheduleChecker)
+
+    scheduleChecker()
+
 
 
 # Interface
