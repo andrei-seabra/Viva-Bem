@@ -20,12 +20,16 @@ def bmiCalculator(weight: str, height: str, canvas: Canvas, resultDisplay: Canva
     acceptableCharacters = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", ",", "."]
     magnitudes = [weight, height]
 
-    # Avoids other characters in magnitudes which aren't related to numbers
+    # Avoids other characters in magnitudes which aren't related to numbers or blank spaces
     for magnitude in magnitudes:
-        for char in magnitude:
-            if not char in acceptableCharacters:
-                ...
-                return
+        if magnitude == "":
+            canvas.itemconfig(resultDisplay, text="Os dados são inválidos.")
+            return
+        else:
+            for char in magnitude:
+                if not char  in acceptableCharacters:
+                    canvas.itemconfig(resultDisplay, text="Os dados são inválidos.")
+                    return
             
     # Treat the information
     for magnitude in magnitudes:
@@ -270,8 +274,8 @@ def kcalCalculatorPage(canvas: Canvas, window: Tk):
     pauseButton = PhotoImage(file="Assets/Images/PauseButton.png")
 
     # Sports canvas
-    canvasSports = Canvas(canvas, width=303, height=77, bg="#F8F8F8")
-    canvas.create_window(51, 66, anchor="nw", width=303, height=77, window=canvasSports)
+    sportsCanvas = Canvas(canvas, width=303, height=77, bg="#F8F8F8")
+    canvas.create_window(51, 66, anchor="nw", width=303, height=77, window=sportsCanvas)
 
     # Sports buttons
     buttons = []
@@ -286,7 +290,7 @@ def kcalCalculatorPage(canvas: Canvas, window: Tk):
     for i, icon in enumerate(sportsIcons):
         buttonIcon = PhotoImage(file=icon)
 
-        button = Button(canvasSports, anchor="center", bd=0, bg="#F8F8F8", image=buttonIcon)
+        button = Button(sportsCanvas, anchor="center", bd=0, bg="#F8F8F8", image=buttonIcon)
         button.grid(row=0, column=i, ipadx=13)
 
         button.image = buttonIcon # Avoids problems with iteration
@@ -395,11 +399,8 @@ def recipesPage(canvas: Canvas):
     """
         Inserts the recipes to the page canvas.
     """
-    ...
+    
     cleanCanvas(canvas)
-
-    # References
-    reloadIcon = PhotoImage(file="Assets/Images/ReloadButton.png")
 
     # Title
     canvas.create_text(128, 125, anchor="nw", font=("Inter", 28, "bold"), text="Receitas")
@@ -458,7 +459,7 @@ def snoozerPage(canvas: Canvas):
     canvas.create_text(140, 275, anchor="nw", font=("Inter", 36), text="22:00") # Timer
 
     # New alarm button
-    button = Button(canvas, bd=0, image=snooze, bg="#F8F8F8")
+    button = Button(canvas, bd=0, image=snooze, bg="#F8F8F8", command=lambda: print("Hello"))
     canvas.create_window(53, 459, anchor="nw", width=75, height=75, window=button)
     canvas.snooze = snooze # Avoids calling function problems
     
