@@ -1,7 +1,7 @@
 # Libries used in myapp library
 from schedule import every, run_pending
 from plyer import notification
-
+from random import choice
 from tkinter import *
 from tkinter import ttk
 
@@ -134,12 +134,51 @@ def kcalCalculator(canvas: Canvas, kcalCounter: Canvas.create_text):
 
     # Calculation
     minutes = time / 60
-    print(minutes)
+    
     kcalBurned = minutes * kcalBurnedPerMin
-    print(kcalBurned)
+    
     canvas.itemconfig(kcalCounter, text=f"{round(kcalBurned)} cal")
 
+# Meal selector
 
+def getRandomMeal(canvas: Canvas, recipeText: Canvas.create_text, meal: str):
+    """
+        Gets a random meal based on the meal time.
+    """
+
+    # References
+    breakfast = [
+        "Panqueca de banana com aveia",
+        "Crepioca com queijo e tomate",
+        "Mingau de aveia",
+        "Banana com pasta de amendoim e aveia",
+        "Iorgute com banana e aveia"
+    ]
+
+    lunchDinner = [
+        "Escondidinho de batata-doce e franco",
+        "Omelete de aborinha",
+        "Macarrão sem glúten ao molho de beterraba",
+        "Nhoque de abobrinha",
+        "Salmão grelhado com legumes",
+        "Espaguete de abobrinha com molho de tomate",
+        "Frango grelhado com salada de folhas verde",
+        "Risoto de cogumelos",
+        "Peixe assado com legumes",
+        "Salada de grão-de-bico com tomate cereja"
+    ]
+
+    # The meal presented in the screen
+    randomMeal = ""
+
+    # Checks which meal time was selected
+    if meal == "breakfast":
+        randomMeal = choice(breakfast)
+    else:
+        randomMeal = choice(lunchDinner)
+
+    # Displays it
+    canvas.itemconfig(recipeText, text=randomMeal)
 
 # Notifications
 
@@ -367,7 +406,7 @@ def recipesPage(canvas: Canvas):
 
     # Meal button canvas
     canvasMeals = Canvas(canvas, width=246, height=75, bg="#F8F8F8")
-    canvas.create_window(45, 182, anchor="nw", window=canvasMeals)
+    canvas.create_window(45, 250, anchor="nw", window=canvasMeals)
 
     # Meal buttons
     buttons = []
@@ -389,12 +428,11 @@ def recipesPage(canvas: Canvas):
         buttons.append(button)
 
     # Recipe text
-    canvas.create_text(43, 308, anchor="nw", font=("Inter", 18, "bold"), text="Omele: \n - 2 ovos \n - 2 fatias de queijo \n - 1 fio de óleo") # Recipe
-
-    # Reload meal button
-    reloadButton = Button(canvas, bd=0, bg="#F8F8F8", image=reloadIcon)
-    canvas.create_window(173, 562, anchor="nw", width=60, height=60, window=reloadButton)
-    canvas.reloadIcon = reloadIcon
+    recipeText = canvas.create_text(43, 376, anchor="nw", font=("Inter", 18, "bold")) # Recipe
+    
+    # Buttons configuration
+    buttons[0].config(command=lambda: getRandomMeal(canvas, recipeText, "breakfast"))
+    buttons[1].config(command=lambda: getRandomMeal(canvas, recipeText, "lunchDinner"))
 
 
 def snoozerPage(canvas: Canvas):
