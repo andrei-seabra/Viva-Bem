@@ -9,7 +9,7 @@ from tkinter import ttk
 
 # Calculations
 
-def bmiCalculator(weight: str, height: str):
+def bmiCalculator(weight: str, height: str, canvas: Canvas, resultDisplay: Canvas.create_text):
     """
         Calculates the bmi of the user based on their information.
     """
@@ -42,7 +42,7 @@ def bmiCalculator(weight: str, height: str):
     result = ""
 
     if bmi < 18.5:
-        result = "Você está abaixo do peso ideal."
+        result = " Você está abaixo \n   do peso ideal."
     elif bmi < 25:
         result = "Você está no peso ideal."
     elif bmi < 30:
@@ -50,14 +50,17 @@ def bmiCalculator(weight: str, height: str):
     elif bmi < 40:
         result = "Você está com obesidade."
     else:
-        result = "Você está com obesidade mórbida."
+        result = "   Você está com \nobesidade mórbida."
     
-    return result
+    canvas.itemconfig(resultDisplay, text=result)
+
+
 
 # Timer
 
 # References
 time = 0
+currentTime = 0
 isRunning = False
 
 def timerHandler(screen: Canvas, timerDisplay: Canvas.create_text, root: Tk):
@@ -76,9 +79,12 @@ def timerStarter(screen: Canvas, timerDisplay: Canvas.create_text, button: Butto
         Runs/stops the timer.
     """
         
-    global time, isRunning
+    global time, isRunning, currentTime
 
     if isRunning:
+        # Resets the counter
+        currentTime = 0
+
         # Changes the button image
         button.config(image=playIcon)
 
@@ -88,8 +94,10 @@ def timerStarter(screen: Canvas, timerDisplay: Canvas.create_text, button: Butto
         # Inicializes the timer
         timerHandler(screen, timerDisplay, root)
 
-        return time
     else:
+        # Stores the past time
+        currentTime = time
+
         # Resets the timer
         time = 0
 
@@ -293,8 +301,11 @@ def bmiCalculatorPage(canvas: Canvas):
 
         entries.append(guiEntry)
 
+    # Result display
+    resultDisplay = canvas.create_text(79, 551, anchor="nw", font=("Inter", 17), text="")
+
     # Calculate button
-    calculateButton = Button(canvas, bd=0, image=buttonImg)
+    calculateButton = Button(canvas, bd=0, image=buttonImg, command=lambda: bmiCalculator(entries[0].get(), entries[1].get(), canvas, resultDisplay))
     canvas.create_window(121, 415, anchor="nw", width=165, height=55, window=calculateButton) # Calculate Button
     canvas.buttonImg = buttonImg # Avoids calling function problems
 

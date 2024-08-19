@@ -1,34 +1,44 @@
-from schedule import every, run_pending
-from plyer import notification
-
-from tkinter import *
-from tkinter import ttk
-
-window = Tk()
-
-def snoozerNotification():
+def bmiCalculator(weight: str, height: str):
     """
-        Notifies the user to sleep and turn off the computer.
+        Calculates the bmi of the user based on their information.
     """
-    
+
     # References
-    icon = "Assets/Images/Icon.ico"
-    cooldown = 3600 # 1h
+    formatedMagnitudes = []
+    
+    acceptableCharacters = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", ",", "."]
+    magnitudes = [weight, height]
 
-    # Notification system
-    notification.notify(title = "Viva Bem", message = "Hora de dormir, desligue o seu computador.", app_icon = icon, timeout = 30)
+    # Avoids other characters in magnitudes which aren't related to numbers
+    for magnitude in magnitudes:
+        for char in magnitude:
+            if not char in acceptableCharacters:
+                ...
+                return
+            
+    # Treat the information
+    for magnitude in magnitudes:
+        if "," in magnitude:
+            formatedMagnitude = float(magnitude.replace(",","."))
+            formatedMagnitudes.append(formatedMagnitude)
+        else:
+            formatedMagnitude = float(magnitude)
+            formatedMagnitudes.append(formatedMagnitude)
 
+    # Calculation
+    bmi = formatedMagnitudes[0] / formatedMagnitudes[1] ** 2
+    
+    result = ""
 
-
-def snoozerNotificationsStarter(window: Tk, hour: str = "22:00"):
-    every().day.at(hour).do(snoozerNotification)
-
-    def scheduleChecker():
-        run_pending()
-        window.after(1000, scheduleChecker)
-
-    scheduleChecker()
-
-snoozerNotificationsStarter(window=window, hour="13:16")
-
-window.mainloop()
+    if bmi < 18.5:
+        result = "Você está abaixo do peso ideal."
+    elif bmi < 25:
+        result = "Você está no peso ideal."
+    elif bmi < 30:
+        result = "Você está sobrepeso."
+    elif bmi < 40:
+        result = "Você está com obesidade."
+    else:
+        result = "Você está com obesidade mórbida."
+    
+    return result
