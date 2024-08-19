@@ -54,6 +54,54 @@ def bmiCalculator(weight: str, height: str):
     
     return result
 
+# Timer
+
+# References
+time = 0
+isRunning = False
+
+def timerHandler(screen: Canvas, timerDisplay: Canvas.create_text, root: Tk):
+    global time, isRunning
+
+    if isRunning:
+        # Displays the time
+        screen.itemconfig(timerDisplay, text=f"{(time // 60):02}:{(time % 60):02}")
+
+        time += 1
+        
+        root.after(1000, timerHandler, screen, timerDisplay, root)
+
+def timerStarter(screen: Canvas, timerDisplay: Canvas.create_text, button: Button, pauseIcon: PhotoImage, playIcon: PhotoImage, root: Tk):
+    """
+        Runs/stops the timer.
+    """
+        
+    global time, isRunning
+
+    if isRunning:
+        # Changes the button image
+        button.config(image=playIcon)
+
+        # Control variable
+        isRunning = False
+
+        # Inicializes the timer
+        timerHandler(screen, timerDisplay, root)
+
+        return time
+    else:
+        # Resets the timer
+        time = 0
+
+        # Changes the button image
+        button.config(image=pauseIcon)
+
+        # Control variable
+        isRunning = True
+
+        # Inicializes the timer
+        timerHandler(screen, timerDisplay, root)
+
 
 
 def kcalCalculator(sport: str, minutes: int):
@@ -155,7 +203,7 @@ def homePage(canvas: Canvas):
 
 
 
-def kcalCalculatorPage(canvas: Canvas):
+def kcalCalculatorPage(canvas: Canvas, root: Tk):
     """
         Inserts the kcal calculator to the page canvas.
     """
@@ -196,10 +244,10 @@ def kcalCalculatorPage(canvas: Canvas):
     canvas.create_image(90, 235, anchor="nw", image=timer)
     canvas.timer = timer # Avoids calling function problems
 
-    canvas.create_text(140, 250, anchor="nw", font=("Inter", 36), text="00:00") # Timer
+    timerDisplay = canvas.create_text(140, 250, anchor="nw", font=("Inter", 36), text="00:00") # Timer
 
     # Toogler buttton
-    tooglerButton = Button(canvas, anchor="nw", bd=0, bg="#F8F8F8", image=playButton)
+    tooglerButton = Button(canvas, anchor="nw", bd=0, bg="#F8F8F8", image=playButton, command=lambda: timerStarter(canvas, timerDisplay, tooglerButton, pauseButton, playButton, root))
     canvas.create_window(158, 417, anchor="nw", width=90, height=90, window=tooglerButton)
     canvas.playButton = playButton # Avoids calling function problems
 

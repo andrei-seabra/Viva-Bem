@@ -42,12 +42,12 @@ for i, icon in enumerate(icons):
     buttons.append(button)
 
 # Bottom bar buttons configuration
-buttons[0].configure(command=lambda canvas=page: homePage(canvas)) # Home page button
-buttons[1].configure(command=lambda canvas=page: kcalCalculatorPage(canvas)) # Kcal calculator button
-buttons[2].configure(command=lambda canvas=page: bmiCalculatorPage(canvas)) # Bmi calculator button
-buttons[3].configure(command=lambda canvas=page: goalPage(canvas)) # Goal page button
-buttons[4].configure(command=lambda canvas=page: recipesPage(canvas)) # Recipes button
-buttons[5].configure(command=lambda canvas=page: snoozerPage(canvas)) # Snoozer page button
+buttons[0].configure(command=lambda: homePage(page)) # Home page button
+buttons[1].configure(command=lambda: kcalCalculatorPage(page, window)) # Kcal calculator button
+buttons[2].configure(command=lambda: bmiCalculatorPage(page)) # Bmi calculator button
+buttons[3].configure(command=lambda: goalPage(page)) # Goal page button
+buttons[4].configure(command=lambda: recipesPage(page)) # Recipes button
+buttons[5].configure(command=lambda: snoozerPage(page)) # Snoozer page button
 
 # Initializations
 
@@ -58,7 +58,7 @@ homePage(page)
 waterNotification(window)
 
 # Sleep notifications
-snoozerNotificationsStarter(window=window, hour="13:18")
+snoozerNotificationsStarter(window, "22:36")
 
 # Runs the window
 window.mainloop()
