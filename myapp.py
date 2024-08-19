@@ -60,21 +60,20 @@ def bmiCalculator(weight: str, height: str, canvas: Canvas, resultDisplay: Canva
 
 # References
 time = 0
-currentTime = 0
 isRunning = False
 
-def timerHandler(screen: Canvas, timerDisplay: Canvas.create_text, root: Tk):
+def timerHandler(canvas: Canvas, timerDisplay: Canvas.create_text, window: Tk):
     global time, isRunning
 
     if isRunning:
         # Displays the time
-        screen.itemconfig(timerDisplay, text=f"{(time // 60):02}:{(time % 60):02}")
+        canvas.itemconfig(timerDisplay, text=f"{(time // 60):02}:{(time % 60):02}")
 
         time += 1
         
-        root.after(1000, timerHandler, screen, timerDisplay, root)
+        window.after(1000, timerHandler, canvas, timerDisplay, window)
 
-def timerStarter(screen: Canvas, timerDisplay: Canvas.create_text, button: Button, pauseIcon: PhotoImage, playIcon: PhotoImage, root: Tk):
+def timerStarter(canvas: Canvas, timerDisplay: Canvas.create_text, button: Button, pauseIcon: PhotoImage, playIcon: PhotoImage, window: Tk, kcalCounter: Canvas.create_text):
     """
         Runs/stops the timer.
     """
@@ -82,8 +81,7 @@ def timerStarter(screen: Canvas, timerDisplay: Canvas.create_text, button: Butto
     global time, isRunning, currentTime
 
     if isRunning:
-        # Resets the counter
-        currentTime = 0
+        kcalCalculator(canvas, kcalCounter)
 
         # Changes the button image
         button.config(image=playIcon)
@@ -92,12 +90,9 @@ def timerStarter(screen: Canvas, timerDisplay: Canvas.create_text, button: Butto
         isRunning = False
 
         # Inicializes the timer
-        timerHandler(screen, timerDisplay, root)
+        timerHandler(canvas, timerDisplay, window)
 
     else:
-        # Stores the past time
-        currentTime = time
-
         # Resets the timer
         time = 0
 
@@ -108,30 +103,41 @@ def timerStarter(screen: Canvas, timerDisplay: Canvas.create_text, button: Butto
         isRunning = True
 
         # Inicializes the timer
-        timerHandler(screen, timerDisplay, root)
+        timerHandler(canvas, timerDisplay, window)
 
+# Sports Chooser
 
+# References
+currentSport = "walking"
 
-def kcalCalculator(sport: str, minutes: int):
+def sportHandler(sport):
+    global currentSport
+    
+    currentSport = sport
+
+def kcalCalculator(canvas: Canvas, kcalCounter: Canvas.create_text):
     """
         Calculates the kcal burned by the user based on their information.
     """
+    global time
 
     # Control variable
     kcalBurnedPerMin = 0
 
     # Checks which sport the user is practicing
-    if sport == "cycling":
+    if currentSport == "cycling":
         kcalBurnedPerMin = 4
-    elif sport == "walking":
+    elif currentSport == "walking":
         kcalBurnedPerMin = 6
     else:
         kcalBurnedPerMin = 10
 
     # Calculation
+    minutes = time / 60
+    print(minutes)
     kcalBurned = minutes * kcalBurnedPerMin
-
-    return kcalBurned
+    print(kcalBurned)
+    canvas.itemconfig(kcalCounter, text=f"{round(kcalBurned)} cal")
 
 
 
@@ -211,7 +217,7 @@ def homePage(canvas: Canvas):
 
 
 
-def kcalCalculatorPage(canvas: Canvas, root: Tk):
+def kcalCalculatorPage(canvas: Canvas, window: Tk):
     """
         Inserts the kcal calculator to the page canvas.
     """
@@ -248,22 +254,28 @@ def kcalCalculatorPage(canvas: Canvas, root: Tk):
 
         buttons.append(button)
 
+    # Buttons configuration
+    buttons[0].configure(command=lambda: sportHandler("walking"))
+    buttons[1].configure(command=lambda: sportHandler("cycling"))
+    buttons[2].configure(command=lambda: sportHandler("running"))
+
     # Timer display
     canvas.create_image(90, 235, anchor="nw", image=timer)
     canvas.timer = timer # Avoids calling function problems
 
     timerDisplay = canvas.create_text(140, 250, anchor="nw", font=("Inter", 36), text="00:00") # Timer
 
+    # Kcal counter
+    kcalCounter = canvas.create_text(134, 555, anchor="nw", font=("Inter", 28, "bold"), text="0 cal")
+
     # Toogler buttton
-    tooglerButton = Button(canvas, anchor="nw", bd=0, bg="#F8F8F8", image=playButton, command=lambda: timerStarter(canvas, timerDisplay, tooglerButton, pauseButton, playButton, root))
+    tooglerButton = Button(canvas, anchor="nw", bd=0, bg="#F8F8F8", image=playButton, command=lambda: timerStarter(canvas, timerDisplay, tooglerButton, pauseButton, playButton, window, kcalCounter))
     canvas.create_window(158, 417, anchor="nw", width=90, height=90, window=tooglerButton)
     canvas.playButton = playButton # Avoids calling function problems
 
     # Burned Kcal counter
     canvas.create_image(72, 543, anchor="nw", image=symbol)
     canvas.symbol = symbol # Avoids calling function problems
-
-    canvas.create_text(134, 555, anchor="nw", font=("Inter", 28, "bold"), text="1.600 cal")
 
 
 
