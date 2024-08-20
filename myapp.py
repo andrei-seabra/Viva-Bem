@@ -1,7 +1,9 @@
 # Libries used in myapp library
 from schedule import every, run_pending
 from plyer import notification
+
 from random import choice
+
 from tkinter import *
 from tkinter import ttk
 
@@ -119,6 +121,22 @@ def sportHandler(sport):
     
     currentSport = sport
 
+def setBurnedKcal(burnedKcal: str):
+    # References
+    kcal = 0
+    total = 0
+
+    # Reads the data
+    with open("Assets/Data/kcalData.txt", "r") as file:
+        kcal = int(file.read())
+
+    # Writes the data
+    with open("Assets/Data/kcalData.txt", "w") as file:
+        total = kcal + int(burnedKcal)
+
+        file.write(str(total))
+
+
 def kcalCalculator(canvas: Canvas, kcalCounter: Canvas.create_text):
     """
         Calculates the kcal burned by the user based on their information.
@@ -141,7 +159,48 @@ def kcalCalculator(canvas: Canvas, kcalCounter: Canvas.create_text):
     
     kcalBurned = minutes * kcalBurnedPerMin
     
+    setBurnedKcal(str(round(kcalBurned)))
+
     canvas.itemconfig(kcalCounter, text=f"{round(kcalBurned)} cal")
+
+
+
+# Goal handlers
+
+def setGoal(goal: str, canvas: Canvas):
+    # Writes the data
+    with open("Assets/Data/goalData.txt", "w") as file:
+        file.write(goal)
+
+    goalPage(canvas) # Returns to the main page
+
+def getGoal():
+    # References
+    goal = ""
+
+    # Read of the data
+    with open("Assets/Data/goalData.txt", "r") as file:
+        goal = file.read()
+    
+    return goal
+
+def getBurnedKcal():
+    burnedKcal = ""
+    # Read of the data
+    with open("Assets/Data/kcalData.txt", "r") as file:
+        burnedKcal = file.read()
+    
+    return burnedKcal
+
+# Percent
+def percentHandler(burnedKcal: str, goal: str):
+    # Avoids division by zero
+    if goal == "0":
+        return "0%"
+    
+    return f"{round((int(burnedKcal) / int(goal)) * 100)}%"
+
+
 
 # Meal selector
 
@@ -152,24 +211,24 @@ def getRandomMeal(canvas: Canvas, recipeText: Canvas.create_text, meal: str):
 
     # References
     breakfast = [
-        "Panqueca de banana com aveia",
-        "Crepioca com queijo e tomate",
-        "Mingau de aveia",
-        "Banana com pasta de amendoim e aveia",
-        "Iorgute com banana e aveia"
+        "Smoothie Verde:\n- Banana\n- Espinafre\n- Iorgute natural\n- Leite\n- Mel",
+        "Omelete:\n- 2 ovo\n- Espinafre\n- Tomate",
+        "Mingau de aveia:\n- Mingau\n- Aveia",
+        "Brownie de banana:\n- Banana\n- Pasta de amendoim\n- Aveia",
+        "Shake de banana:\n- Iorgute natural\n- Banana\n- Aveia"
     ]
 
     lunchDinner = [
-        "Escondidinho de batata-doce e franco",
-        "Omelete de aborinha",
-        "Macarrão sem glúten ao molho de beterraba",
-        "Nhoque de abobrinha",
-        "Salmão grelhado com legumes",
-        "Espaguete de abobrinha com molho de tomate",
-        "Frango grelhado com salada de folhas verde",
-        "Risoto de cogumelos",
-        "Peixe assado com legumes",
-        "Salada de grão-de-bico com tomate cereja"
+        "Escondidinho de frango:\n- Peito de frango\n- Cebola\n- 2 dentes de alho\n- Tomate\n- Pimetão\n- Milho",
+        "Tacos de feijão:\n- Feijão preto\n- Milho\n- Tomate\n- Cebola\n- 4 tortilhas integrais",
+        "Espaguete de abobrinha:\n- 2 abobrinhas\n- Molho de tomate\n- 1 dente de alho",
+        "Nhoque de abobrinha:\n- 2 abobrinhas\n- Farinha de trigo\n- Ovo\n- Queijo\n- 1 dente de alho",
+        "Salmão:\n- Filé de salmão\n- Espinafre",
+        "Ratatouille de legumes:\n- Berinjela\n- Abobrinha\n- Pimentão\n- Tomate\n- Cebola\n- 2 dentes de alho",
+        "Frango grelhado:\n- Peito de frango\n- Brocólis",
+        "Sopa de lentilha:\n- Lentilha\n- Cenoura\n- Cebola\n- 1 dente de alho",
+        "Salada de atum:\n- Lata de atum\n- Milho\n- Tomate\n- Cebola roxa",
+        "Salada de grão-de-bico:\n- Grão-de-bico\n- Tomate\n- Pepino\n- Cebola roxa"
     ]
 
     # The meal presented in the screen
@@ -365,6 +424,36 @@ def bmiCalculatorPage(canvas: Canvas):
 
 
 
+# Goal configuration
+
+def setGoalPage(canvas: Canvas):
+    """
+        Inserts the page to set the user's goal.
+    """
+
+    cleanCanvas(canvas)
+
+    # References
+    background = PhotoImage(file="Assets/Images/Entry.png")
+    setButton = PhotoImage(file="Assets/Images/SetButton.png")
+
+    # Title
+    canvas.create_text(111, 113, anchor="nw", font=("Inter", 24, "bold"), text="Nova meta")
+
+    # Entry
+    canvas.create_text(78, 312, anchor="nw", font=("Inter", 12, "bold"), text="Meta de queima de calorias") # Title
+
+    canvas.create_image(78, 342, anchor="nw", image=background) # Background image
+    canvas.background = background # Avoids calling function problems
+
+    entry = Entry(canvas, bd=0, fg="black", font=("Inter", 20), highlightbackground="#D9D9D9", background="#D9D9D9")
+    canvas.create_window(78, 342, anchor="nw", width=250, height=55, window=entry) # Entry
+
+    button = Button(canvas, bd=0, image=setButton, bg="#F8F8F8", command=lambda: setGoal(entry.get(), canvas))
+    canvas.create_window(114, 525, anchor="nw", width=165, height=55, window=button)
+
+    canvas.setButton = setButton # Avoids calling function problems
+
 def goalPage(canvas: Canvas):
     """
         Inserts the goals to the page canvas.
@@ -384,11 +473,11 @@ def goalPage(canvas: Canvas):
     canvas.flag = flag # Avoids calling function problems
 
     # Results text
-    canvas.create_text(171, 325, anchor="nw", font=("Inter", 36, "bold"), text="100%") # Percentage display
-    canvas.create_text(110, 376, anchor="nw", font=("Inter", 24, "bold"), text="10.000 / 10.000") # Total display
+    canvas.create_text(171, 325, anchor="nw", font=("Inter", 36, "bold"), text=f"{percentHandler(getBurnedKcal(), getGoal())}") # Percentage display
+    canvas.create_text(110, 376, anchor="nw", font=("Inter", 24, "bold"), text=f"{getBurnedKcal()} / {getGoal()}") # Total display
 
     # Add new goal button
-    button = Button(canvas, bd=0, image=add, bg="#F8F8F8")
+    button = Button(canvas, bd=0, image=add, bg="#F8F8F8", command=lambda: setGoalPage(canvas))
     canvas.create_window(158, 505, anchor="nw", width=90, height=90, window=button) # New goal button
     canvas.add = add # Avoids calling function problems
 
@@ -428,7 +517,7 @@ def recipesPage(canvas: Canvas):
         buttons.append(button)
 
     # Recipe text
-    recipeText = canvas.create_text(43, 376, anchor="nw", font=("Inter", 18, "bold")) # Recipe
+    recipeText = canvas.create_text(43, 376, anchor="nw", font=("Inter", 18)) # Recipe
     
     # Buttons configuration
     buttons[0].config(command=lambda: getRandomMeal(canvas, recipeText, "breakfast"))
