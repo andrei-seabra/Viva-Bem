@@ -209,12 +209,11 @@ def snoozerNotification():
     
     # References
     icon = "Assets/Images/Icon.ico"
-    cooldown = 3600 # 1h
 
     # Notification system
     notification.notify(title = "Viva Bem", message = "Hora de dormir, desligue o seu computador.", app_icon = icon, timeout = 30)
 
-def snoozerNotificationsStarter(window: Tk, hour: str = "22:00"):
+def snoozerNotificationsStarter(window: Tk, hour: str):
     every().day.at(hour).do(snoozerNotification)
 
     def scheduleChecker():
@@ -436,7 +435,7 @@ def recipesPage(canvas: Canvas):
     buttons[1].config(command=lambda: getRandomMeal(canvas, recipeText, "lunchDinner"))
 
 
-def snoozerPage(canvas: Canvas):
+def snoozerPage(canvas: Canvas, window: Tk):
     """
         Inserts the snoozer to the page canvas.
     """
@@ -456,13 +455,39 @@ def snoozerPage(canvas: Canvas):
     canvas.create_image(90, 260, anchor="nw", image=timer)
     canvas.timer = timer # Avoids calling function problems
 
-    canvas.create_text(140, 275, anchor="nw", font=("Inter", 36), text="22:00") # Timer
+    timerDisplay = canvas.create_text(140, 275, anchor="nw", font=("Inter", 36), text="22:00") # Timer
 
     # New alarm button
-    button = Button(canvas, bd=0, image=snooze, bg="#F8F8F8", command=lambda: print("Hello"))
+    button = Button(canvas, bd=0, image=snooze, bg="#F8F8F8", command=lambda: setHour(options, canvas, timerDisplay, window))
     canvas.create_window(53, 459, anchor="nw", width=75, height=75, window=button)
     canvas.snooze = snooze # Avoids calling function problems
     
     # Alarm options
-    options = ttk.Combobox(canvas, state="readonly", background="#666666", font=("Inter", 10, "bold"), justify="center")
+    hours = [
+        "18:00",
+        "19:00",
+        "20:00",
+        "21:00",
+        "22:00",
+        "23:00"
+    ]
+    
+    # Combobox
+    options = ttk.Combobox(canvas, state="readonly", background="#666666", font=("Inter", 20, "bold"), justify="center", values=hours)
     canvas.create_window(140, 470, anchor="nw", width=225, height=50, window=options)
+
+# Snoozer configuration
+
+# References
+currentHour = ""
+
+def setHour(comboBox: ttk.Combobox, canvas: Canvas, timerDisplay: Canvas.create_text, window: Tk):
+    """
+        Sets the hour of the snoozer.
+    """
+    global currentHour
+
+    currentHour = comboBox.get()
+
+    canvas.itemconfig(timerDisplay, text=currentHour)
+    snoozerNotificationsStarter(window, currentHour)

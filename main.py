@@ -47,7 +47,7 @@ buttons[1].configure(command=lambda: kcalCalculatorPage(page, window)) # Kcal ca
 buttons[2].configure(command=lambda: bmiCalculatorPage(page)) # Bmi calculator button
 buttons[3].configure(command=lambda: goalPage(page)) # Goal page button
 buttons[4].configure(command=lambda: recipesPage(page)) # Recipes button
-buttons[5].configure(command=lambda: snoozerPage(page)) # Snoozer page button
+buttons[5].configure(command=lambda: snoozerPage(page, window)) # Snoozer page button
 
 # Initializations
 
@@ -56,9 +56,6 @@ homePage(page)
 
 # Water notifications
 waterNotification(window)
-
-# Sleep notifications
-snoozerNotificationsStarter(window, "22:36")
 
 # Runs the window
 window.mainloop()
