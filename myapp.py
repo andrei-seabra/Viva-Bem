@@ -167,12 +167,26 @@ def kcalCalculator(canvas: Canvas, kcalCounter: Canvas.create_text):
 
 # Goal handlers
 
-def setGoal(goal: str, canvas: Canvas):
+def setGoal(goal: str, canvas: Canvas, window: Tk):
+    acceptableCharacters = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
+
+    # Avoids other characters in goal which aren't related to numbers or blank spaces
+    if goal == "" or goal == "0":
+        alert = canvas.create_text(85, 410, anchor="nw", font=("Inter", 16, "bold"), text="Os dados são inválidos.")
+        window.after(2000, lambda: canvas.delete(alert))
+        return
+    else:
+        for char in goal:
+            if not char  in acceptableCharacters:
+                alert = canvas.create_text(85, 410, anchor="nw", font=("Inter", 16, "bold"), text="Os dados são inválidos.")
+                window.after(2000, lambda: canvas.delete(alert))
+                return
+
     # Writes the data
     with open("Assets/Data/goalData.txt", "w") as file:
         file.write(goal)
 
-    goalPage(canvas) # Returns to the main page
+    goalPage(canvas, window) # Returns to the main page
 
 def getGoal():
     # References
@@ -426,7 +440,7 @@ def bmiCalculatorPage(canvas: Canvas):
 
 # Goal configuration
 
-def setGoalPage(canvas: Canvas):
+def setGoalPage(canvas: Canvas, window: Tk):
     """
         Inserts the page to set the user's goal.
     """
@@ -438,10 +452,10 @@ def setGoalPage(canvas: Canvas):
     setButton = PhotoImage(file="Assets/Images/SetButton.png")
 
     # Title
-    canvas.create_text(111, 113, anchor="nw", font=("Inter", 24, "bold"), text="Nova meta")
+    canvas.create_text(125, 113, anchor="nw", font=("Inter", 24, "bold"), text="Nova meta")
 
     # Entry
-    canvas.create_text(78, 312, anchor="nw", font=("Inter", 12, "bold"), text="Meta de queima de calorias") # Title
+    canvas.create_text(100, 312, anchor="nw", font=("Inter", 12, "bold"), text="Meta de queima de calorias") # Title
 
     canvas.create_image(78, 342, anchor="nw", image=background) # Background image
     canvas.background = background # Avoids calling function problems
@@ -449,12 +463,12 @@ def setGoalPage(canvas: Canvas):
     entry = Entry(canvas, bd=0, fg="black", font=("Inter", 20), highlightbackground="#D9D9D9", background="#D9D9D9")
     canvas.create_window(78, 342, anchor="nw", width=250, height=55, window=entry) # Entry
 
-    button = Button(canvas, bd=0, image=setButton, bg="#F8F8F8", command=lambda: setGoal(entry.get(), canvas))
+    button = Button(canvas, bd=0, image=setButton, bg="#F8F8F8", command=lambda: setGoal(entry.get(), canvas, window))
     canvas.create_window(114, 525, anchor="nw", width=165, height=55, window=button)
 
     canvas.setButton = setButton # Avoids calling function problems
 
-def goalPage(canvas: Canvas):
+def goalPage(canvas: Canvas, window:Tk):
     """
         Inserts the goals to the page canvas.
     """
@@ -474,10 +488,10 @@ def goalPage(canvas: Canvas):
 
     # Results text
     canvas.create_text(171, 325, anchor="nw", font=("Inter", 36, "bold"), text=f"{percentHandler(getBurnedKcal(), getGoal())}") # Percentage display
-    canvas.create_text(110, 376, anchor="nw", font=("Inter", 24, "bold"), text=f"{getBurnedKcal()} / {getGoal()}") # Total display
+    canvas.create_text(110, 376, anchor="nw", font=("Inter", 24, "bold"), text=(f"{int(getBurnedKcal()):,.0f} / {int(getGoal()):,.0f}").replace(",", ".")) # Total display
 
     # Add new goal button
-    button = Button(canvas, bd=0, image=add, bg="#F8F8F8", command=lambda: setGoalPage(canvas))
+    button = Button(canvas, bd=0, image=add, bg="#F8F8F8", command=lambda: setGoalPage(canvas, window))
     canvas.create_window(158, 505, anchor="nw", width=90, height=90, window=button) # New goal button
     canvas.add = add # Avoids calling function problems
 
