@@ -161,7 +161,7 @@ def kcalCalculator(canvas: Canvas, kcalCounter: Canvas.create_text):
     
     setBurnedKcal(str(round(kcalBurned)))
 
-    canvas.itemconfig(kcalCounter, text=f"{round(kcalBurned)} cal")
+    canvas.itemconfig(kcalCounter, text=f"{round(kcalBurned)} kcal")
 
 
 
@@ -381,7 +381,7 @@ def kcalCalculatorPage(canvas: Canvas, window: Tk):
     timerDisplay = canvas.create_text(140, 250, anchor="nw", font=("Inter", 36), text="00:00") # Timer
 
     # Kcal counter
-    kcalCounter = canvas.create_text(134, 555, anchor="nw", font=("Inter", 28, "bold"), text="0 cal")
+    kcalCounter = canvas.create_text(134, 555, anchor="nw", font=("Inter", 28, "bold"), text="0 kcal")
 
     # Toogler buttton
     tooglerButton = Button(canvas, anchor="nw", bd=0, bg="#F8F8F8", image=playButton, command=lambda: timerStarter(canvas, timerDisplay, tooglerButton, pauseButton, playButton, window, kcalCounter))

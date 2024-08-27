@@ -1,3 +1,10 @@
+"""
+    Programa: Viva Bem
+    Autores: Andrei Amasilio Seabra e Pedro Antônio Anastácio Borges
+    Data da última modificação: 20/08/2024
+    Objetivo: facilitar a manutenção e monitoramento da saúde dos usuários
+"""
+
 # Libraries used in the project
 from tkinter import *
 from myapp import *
