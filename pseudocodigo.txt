@@ -1,0 +1,91 @@
+Algoritmo CalculadoraIMC
+
+Var
+    massa, altura, imc: Real
+
+Início
+    Escreva("Digite sua massa: ")
+    Leia(massa)
+
+    Escreva("Digite sua altura: ")
+    Leia(altura)
+
+    imc <- massa / altura * altura
+
+    Se imc < 18.5 então
+        Escreva("Abaixo do peso ideal.")
+    Senão
+        Se imc < 25 então
+            Escreva("Peso ideal.")
+        Senão
+            Se imc < 30 então
+                Escreva("Sobrepeso.")
+            Senão
+                Se imc < 40 então
+                    Escreva("Obesidade.")
+                Senão
+                    Escreva("Obesidade mórbida.")
+                FimSe
+            FimSe
+        FimSe
+    FimSe
+Fim
+
+Algoritmo ContadorCalorias
+
+Var
+    minutos, kcalQueimadas: Inteiro; esporte: string
+
+Início
+    Escreva("Digite o esporte praticado: ")
+    Leia(esporte)
+
+    Escreva("Digite o tempo exercitado (min): ")
+    Leia(minutos)
+
+    total <- 0
+
+    Se esporte = "andar de bicicleta" então
+        total <- minutos * 4
+    Senão
+        Se esporte = "caminhada" então
+            total <- minutos * 6
+        Senão
+            total <- minutos * 10
+        FimSe
+    FimSe
+
+    Escreva(total)
+Fim
+
+Algoritmo Metas
+
+Var
+    meta, kcalQueimadas: string
+
+Início
+    Escreva("Digite a quantidade de kcal que você queimou: ")
+    Leia(kcalQueimadas)
+
+    Escreva("Digite sua meta: ")
+    Leia(meta)
+
+    Escreva((kcalQueimadas / meta * 100) + "%")
+    Escreva(kcalQueimadas + "/" + meta)
+Fim
+
+Algoritmo Receitas
+
+Var
+    receiçãoDesejada: string; cafeManha: vetor[0..4] de string; almoçoJanta: vetor[0..9] de string
+
+Início
+    Escreva("Digite a refeição desejada: ")
+    Leia(receiçãoDesejada)
+
+    Se receiçãoDesejada = "café da manhã" então
+        Escreva(cafeManha)
+    Senão
+        Escreva(almoçoJanta)
+    FimSe
+Fim
